@@ -37,7 +37,9 @@
 #  > "Random",
 #  > "Roots",
 #  > "Statistics",
-#  >      "StatsBase")),
+#  >      "StatsBase",
+#  > "JuMP",
+#  > "Ipopt")),
 #  > ide = "none",
 #  > project_path = path_default_nix,
 #  > overwrite = TRUE,
@@ -80,6 +82,8 @@ let
       "Distributions"
       "ForwardDiff"
       "Interpolations"
+      "Ipopt"
+      "JuMP"
       "LinearAlgebra"
       "NLsolve"
       "Optim"

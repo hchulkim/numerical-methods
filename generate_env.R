@@ -25,7 +25,9 @@ rix(date = "2025-09-09",
                                "Random",
                                "Roots",
                                "Statistics",
-                               "StatsBase"
+                               "StatsBase",
+                               "JuMP",
+                               "Ipopt"
                    )
                    ),
     ide = "none",
