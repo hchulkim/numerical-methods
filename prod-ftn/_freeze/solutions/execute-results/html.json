@@ -1,0 +1,19 @@
+{
+  "hash": "4128f6096c37c8514a772bdac2fc7c1f",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Solutions\"\nengine: knitr\n---\n\n\n\n# Overview\n\nThis document handles all **R-side preprocessing**: reading raw inputs from\n`data/`, cleaning, and writing tidy outputs that `computation.qmd` consumes.\n\nProject root is resolved with `here::here()` so paths work regardless of the\nrender working directory.\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata_dir <- here(\"prod-ftn\", \"data\")\nlist.files(data_dir)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n#> character(0)\n```\n\n\n:::\n:::\n\n\n# Load\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Example: read every CSV in data/ into a named list of data.tables.\nfiles <- list.files(data_dir, pattern = \"\\\\.csv$\", full.names = TRUE)\nraw   <- setNames(lapply(files, fread), tools::file_path_sans_ext(basename(files)))\n```\n:::\n\n\n# Clean\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Example transform — replace with real cleaning logic.\ntidy <- raw$main |>\n  as_tibble() |>\n  filter(!is.na(id)) |>\n  mutate(date = ymd(date)) |>\n  arrange(id, date)\n```\n:::\n\n\n# Summarize\n\n\n::: {#tbl-summary .cell tbl-cap='Summary of cleaned data'}\n\n```{.r .cell-code}\ntidy |>\n  summarise(across(where(is.numeric), list(mean = mean, sd = sd), .names = \"{.col}_{.fn}\")) |>\n  kbl(booktabs = TRUE, digits = 3) |>\n  kable_styling(latex_options = \"hold_position\")\n```\n:::\n\n\n# Export\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# Outputs for the Julia computation step.\nfwrite(tidy, file.path(data_dir, \"clean.csv\"))\n```\n:::\n\n\n# Math\n\n\\begin{align}\n  y_{it} = \\beta \\text{SAM}_{it} + \\varepsilon_{it}.\n\\end{align}\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"solutions_files/libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"solutions_files/libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

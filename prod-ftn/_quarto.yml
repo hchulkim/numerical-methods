@@ -1,0 +1,46 @@
+project:
+  title: "prod-ftn"
+
+# Render every .qmd in this directory.
+# `quarto render` builds all formats below; pick one with
+#   quarto render <file>.qmd --to html|pdf
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    df-print: paged
+    embed-resources: true
+    fig-width: 7
+    fig-height: 4.5
+  pdf:
+    documentclass: article
+    keep-tex: true          # emits the .tex source alongside the .pdf
+    toc: true
+    number-sections: true
+    geometry:
+      - margin=1in
+    include-in-header:
+      text: |
+        \usepackage{amsmath}
+        \usepackage{amsfonts}
+        \usepackage{setspace}
+        \usepackage{threeparttable}
+        \usepackage[normalem]{ulem}
+    fig-width: 6
+    fig-height: 4
+
+# Shared execution defaults; per-document front matter may override.
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+  freeze: auto
+
+author: "himakun"
+date: last-modified
