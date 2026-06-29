@@ -1,0 +1,92 @@
+---
+title: "Solutions"
+engine: knitr
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# knitr engine runs all R chunks. Global chunk options live here.
+knitr::opts_chunk$set(
+  echo    = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+library(here)
+library(data.table)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lubridate)
+library(readr)
+library(readxl)
+library(glue)
+library(kableExtra)
+```
+
+# Overview
+
+This document handles all **R-side preprocessing**: reading raw inputs from
+`data/`, cleaning, and writing tidy outputs that `computation.qmd` consumes.
+
+Project root is resolved with `here::here()` so paths work regardless of the
+render working directory.
+
+```{r paths}
+data_dir <- here("prod-ftn", "data")
+list.files(data_dir)
+```
+
+# Load
+
+```{r load}
+#| eval: false
+
+# Example: read every CSV in data/ into a named list of data.tables.
+files <- list.files(data_dir, pattern = "\\.csv$", full.names = TRUE)
+raw   <- setNames(lapply(files, fread), tools::file_path_sans_ext(basename(files)))
+```
+
+# Clean
+
+```{r clean}
+#| eval: false
+
+# Example transform — replace with real cleaning logic.
+tidy <- raw$main |>
+  as_tibble() |>
+  filter(!is.na(id)) |>
+  mutate(date = ymd(date)) |>
+  arrange(id, date)
+```
+
+# Summarize
+
+```{r}
+#| label: tbl-summary
+#| tbl-cap: "Summary of cleaned data"
+#| eval: false
+
+tidy |>
+  summarise(across(where(is.numeric), list(mean = mean, sd = sd), .names = "{.col}_{.fn}")) |>
+  kbl(booktabs = TRUE, digits = 3) |>
+  kable_styling(latex_options = "hold_position")
+```
+
+# Export
+
+```{r export}
+#| eval: false
+
+# Outputs for the Julia computation step.
+fwrite(tidy, file.path(data_dir, "clean.csv"))
+```
+
+# Math
+
+\begin{align}
+  y_{it} = \beta \text{SAM}_{it} + \varepsilon_{it}.
+\end{align}
